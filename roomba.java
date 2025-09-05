@@ -32,10 +32,14 @@ public class Driver implements Directions {
 
     String wrldName = "basicRoom.wld";
 
-		World.readWorld(wrldName);
+	World.readWorld(wrldName);
     World.setVisible(true);
-	var beepers = 0;
-	Robot r = new Robot(11,6,East,beepers);
+	int largest_pile = 0;
+	int piles = 0;
+	double total = 0;
+	double length = 0;
+	double width = 0;
+	Robot r = new Robot(11,6,East,0);
 	World.setDelay(1);
 
     
@@ -50,12 +54,22 @@ public class Driver implements Directions {
 		// what is that and why are we getting it?
 	boolean walls = r.frontIsClear();
 	for (int i = 0; i<1;){
+		length = 0;
 		while (walls == true){
 			r.move();
+			length++;
 			boolean scan = r.nextToABeeper();
+			int beepers = 0;
 			while (scan == true){
 				r.pickBeeper();
+				total++;
 				scan = r.nextToABeeper();
+				beepers++;
+				if (beepers > largest_pile){
+					largest_pile = beepers;
+					beepers = 0;
+				}
+				
 			
 			}
 			walls = r.frontIsClear();
@@ -69,63 +83,33 @@ public class Driver implements Directions {
 				r.turnLeft();
 				r.turnLeft();
 				walls = r.frontIsClear();
-				if (walls == true) {
-				r.move();
-				r.turnLeft();
-				r.turnLeft();
-				r.turnLeft();
-				walls = r.frontIsClear();
-				} else {
-					r.turnLeft();
-					r.turnLeft();
+				if (walls == true){
+					width++;
 					r.move();
+					r.turnLeft();
+					r.turnLeft();
+					r.turnLeft();
+					walls = r.frontIsClear();
+				} else {
+					width++;
+					System.out.println("Total Beepers: " + total + " beepers");
+					System.out.println("The largest pile's size: " + largest_pile + " beepers");
+					System.out.println("Area of Room: " + (length*width));
+					System.out.println("Percent room dirty: " + (total/(length*width)));
 				}
 				}
 			else if (FaceWest==true){
+				width++;
 				r.turnLeft();
-				walls = r.frontIsClear();
-				if (walls == true){
 				r.move();
 				r.turnLeft();
 				walls = r.frontIsClear();
-				} else{
-					r.turnLeft();
-					r.turnLeft();
-					r.move();
 				}
 			} 
-			else if (FaceNorth==true){
-				r.turnLeft();
-				walls = r.frontIsClear();
-				if (walls == true){
-				r.move();
-				r.turnLeft();
-				walls = r.frontIsClear();
-				} else {
-					r.turnLeft();
-					r.turnLeft();
 
-				}
-			} 
-			else{
-				r.turnLeft();
-				r.turnLeft();
-				r.turnLeft();
-				walls = r.frontIsClear();
-				if (walls == true){
-				r.move();
-				r.turnLeft();
-				r.turnLeft();
-				r.turnLeft();
-				walls = r.frontIsClear();
-				} else {
-					r.turnLeft();
-					r.turnLeft();
-					r.move();
-				}
-			}
-				}
-			}
+
+				} 
+
 
 
 
